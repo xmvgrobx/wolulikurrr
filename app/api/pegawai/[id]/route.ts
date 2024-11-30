@@ -34,12 +34,12 @@ export async function PUT(
     const { id } = params;
     const body = await request.json();
 
-    const { name, email, phone, shift } = body;
+    const { name, email, phone, shift, alamat, jenisKelamin } = body;
 
     // Update data karyawan
     const updatedPegawai = await prisma.pegawai.update({
       where: { id },
-      data: { name, email, phone, shift },
+      data: { name, email, phone, shift, alamat, jenisKelamin },
     });
 
     return NextResponse.json(updatedPegawai); 

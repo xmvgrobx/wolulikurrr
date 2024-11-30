@@ -11,6 +11,8 @@ const EditPegawai = ({ id }: { id: string }) => {
     email: "",
     phone: "",
     shift: "",
+    jenisKelamin: "",
+    alamat: "",
   });
 
   useEffect(() => {
@@ -19,7 +21,9 @@ const EditPegawai = ({ id }: { id: string }) => {
         const response = await fetch(`/api/pegawai/${id}`);
         if (response.ok) {
           const data = await response.json();
-          setState(data); 
+          // Mengatur state dengan data pegawai yang sudah ada
+          setState(data);
+        } else {
           console.error("Failed to fetch pegawai data");
           alert("Failed to fetch pegawai data");
         }
@@ -33,7 +37,7 @@ const EditPegawai = ({ id }: { id: string }) => {
   }, [id]);
 
   // Handle perubahan input
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setState((prev) => ({
       ...prev,
@@ -72,10 +76,7 @@ const EditPegawai = ({ id }: { id: string }) => {
       <form onSubmit={handleSubmit}>
         {/* Input untuk name */}
         <div className="mb-5">
-          <label
-            htmlFor="name"
-            className="block text-sm font-medium text-gray-800"
-          >
+          <label htmlFor="name" className="block text-sm font-medium text-gray-800">
             Full Name
           </label>
           <input
@@ -91,10 +92,7 @@ const EditPegawai = ({ id }: { id: string }) => {
 
         {/* Input untuk email */}
         <div className="mb-5">
-          <label
-            htmlFor="email"
-            className="block text-sm font-medium text-gray-900"
-          >
+          <label htmlFor="email" className="block text-sm font-medium text-gray-900">
             Email
           </label>
           <input
@@ -110,10 +108,7 @@ const EditPegawai = ({ id }: { id: string }) => {
 
         {/* Input untuk phone */}
         <div className="mb-5">
-          <label
-            htmlFor="phone"
-            className="block text-sm font-medium text-gray-900"
-          >
+          <label htmlFor="phone" className="block text-sm font-medium text-gray-900">
             Phone Number
           </label>
           <input
@@ -127,12 +122,43 @@ const EditPegawai = ({ id }: { id: string }) => {
           />
         </div>
 
+        {/* Input untuk alamat */}
+        <div className="mb-5">
+          <label htmlFor="alamat" className="block text-sm font-medium text-gray-900">
+            Alamat
+          </label>
+          <input
+            type="text"
+            name="alamat"
+            id="alamat"
+            className="input input-bordered w-full max-w-xs"
+            placeholder="Alamat..."
+            value={state.alamat}
+            onChange={handleChange}
+          />
+        </div>
+
+        {/* Select untuk jenisKelamin */}
+        <div className="mb-5">
+          <label htmlFor="jenisKelamin" className="block text-sm font-medium text-gray-900">
+            Jenis Kelamin
+          </label>
+          <select
+            name="jenisKelamin"
+            id="jenisKelamin"
+            className="input input-bordered w-full max-w-xs"
+            value={state.jenisKelamin}
+            onChange={handleChange} // onChange tetap bisa digunakan
+          >
+            <option value="">Pilih Jenis Kelamin</option>
+            <option value="LAKI_LAKI">Laki-laki</option>
+            <option value="PEREMPUAN">Perempuan</option>
+          </select>
+        </div>
+
         {/* Input untuk shift */}
         <div className="mb-5">
-          <label
-            htmlFor="shift"
-            className="block text-sm font-medium text-gray-900"
-          >
+          <label htmlFor="shift" className="block text-sm font-medium text-gray-900">
             Jadwal Shift
           </label>
           <input

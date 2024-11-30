@@ -9,9 +9,11 @@ const CreatePegawai = () => {
     email: '',
     phone: '',
     shift: '',
+    alamat: '',
+    jenisKelamin: ''  // Menyimpan jenis kelamin sebagai 'L' atau 'P'
   });
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setState((prev) => ({
       ...prev,
@@ -21,7 +23,14 @@ const CreatePegawai = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const { name, email, phone, shift } = state;
+    const { name, email, phone, shift, alamat, jenisKelamin } = state;
+
+    // Pastikan jenisKelamin memiliki nilai yang benar
+    if (!jenisKelamin) {
+      console.error('Jenis Kelamin harus dipilih');
+      return;
+    }
+    const jenisKelaminEnum = jenisKelamin === 'L' ? 'LAKI_LAKI' : 'PEREMPUAN';
 
     try {
       const response = await fetch('/api/pegawai/create', {
@@ -29,13 +38,21 @@ const CreatePegawai = () => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ name, email, phone, shift }),
+        body: JSON.stringify({ name, email, phone, shift, alamat, jenisKelamin }),
       });
 
       if (response.ok) {
         const result = await response.json();
         console.log('Pegawai created successfully:', result);
-        // Handle successful response, like resetting the form or showing success message
+        // Handle successful response, seperti reset form atau tampilkan pesan sukses
+        setState({
+          name: '',
+          email: '',
+          phone: '',
+          shift: '',
+          alamat: '',
+          jenisKelamin: jenisKelaminEnum,  // Mengirim nilai enum yang benar
+        });
       } else {
         console.error('Failed to create pegawai');
       }
@@ -49,10 +66,7 @@ const CreatePegawai = () => {
       <div>
         <form onSubmit={handleSubmit}>
           <div className="mb-5">
-            <label
-              htmlFor="name"
-              className="block text-sm font-medium text-gray-800"
-            >
+            <label htmlFor="name" className="block text-sm font-medium text-gray-800">
               Full Name
             </label>
             <input
@@ -67,10 +81,7 @@ const CreatePegawai = () => {
           </div>
 
           <div className="mb-5">
-            <label
-              htmlFor="email"
-              className="block text-sm font-medium text-gray-900"
-            >
+            <label htmlFor="email" className="block text-sm font-medium text-gray-900">
               Email
             </label>
             <input
@@ -85,10 +96,7 @@ const CreatePegawai = () => {
           </div>
 
           <div className="mb-5">
-            <label
-              htmlFor="phone"
-              className="block text-sm font-medium text-gray-900"
-            >
+            <label htmlFor="phone" className="block text-sm font-medium text-gray-900">
               Phone Number
             </label>
             <input
@@ -103,10 +111,39 @@ const CreatePegawai = () => {
           </div>
 
           <div className="mb-5">
-            <label
-              htmlFor="shift"
-              className="block text-sm font-medium text-gray-900"
+            <label htmlFor="alamat" className="block text-sm font-medium text-gray-900">
+              Alamat
+            </label>
+            <input
+              type="text"
+              name="alamat"
+              id="alamat"
+              className="input input-bordered w-full max-w-xs"
+              placeholder="Alamat..."
+              value={state.alamat}
+              onChange={handleChange}
+            />
+          </div>
+
+          <div className="mb-5">
+            <label htmlFor="jenisKelamin" className="block text-sm font-medium text-gray-900">
+              Jenis Kelamin
+            </label>
+            <select
+              name="jenisKelamin"
+              id="jenisKelamin"
+              className="input input-bordered w-full max-w-xs"
+              value={state.jenisKelamin}
+              onChange={handleChange}
             >
+              <option value="">Pilih Jenis Kelamin</option>
+              <option value="LAKI_LAKI">Laki-laki</option>
+              <option value="PEREMPUAN">Perempuan</option>
+            </select>
+          </div>
+
+          <div className="mb-5">
+            <label htmlFor="shift" className="block text-sm font-medium text-gray-900">
               Jadwal Shift
             </label>
             <input

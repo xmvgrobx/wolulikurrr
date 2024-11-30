@@ -16,7 +16,7 @@ const PegawaiTable = async () => {
     <table className="w-full text-sm text-left bg-white text-gray-500">
       <thead className="text-sm text-gray-700 uppercase bg-white-50">
         <tr>
-          <th className="py-3 px-6">Name</th>
+          <th className="py-3 px-6">Nama</th>
           <th className="py-3 px-6">Jadwal Shift</th>
           <th className="py-3 px-6 text-center">Actions</th>
         </tr>

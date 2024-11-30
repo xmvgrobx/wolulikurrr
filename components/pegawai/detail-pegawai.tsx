@@ -64,6 +64,12 @@ const DetailPegawai = ({ id }: { id: string }) => {
                 <p>
                   <strong>Shift:</strong> {pegawai.shift}
                 </p>
+                <p>
+                  <strong>Alamat:</strong> {pegawai.alamat}
+                </p>
+                <p>
+                  <strong>Jenis Kelamin:</strong> {pegawai.jenisKelamin}
+                </p>
               </div>
             ) : (
               <p>Failed to load pegawai details.</p>

@@ -1,46 +1,60 @@
-import React from 'react'
-import Image from 'next/image'
-import { DeleteMenu } from '@/components/buttons'
-import type { Menu } from "@prisma/client"
-import { formatCurrency } from '@/lib/utils'
+// FIX BGT YG INI
+import { prisma } from '@/lib/prisma';
+import Image from 'next/image';
+import Link from 'next/link';
+import DeleteButton from '@/components/menu/delete-menu';
+import { formatCurrency } from '@/lib/utils';
 
-const MenuCard = ({ data }: { data: Menu }) => {
-    return (
-        <div className="w-64 border border-gray-200 rounded-lg shadow-lg">
-  {/* Bagian Gambar Produk */}
-  <div className="relative w-full h-48">
-    <Image
-      src={data.fotoUrl}
-      alt={data.name}
-      fill
-      priority
-      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-      className="rounded-t-lg object-cover"
-    />
-  </div>
+export default async function MenuPage() {
+  const menus = await prisma.menu.findMany({
+    orderBy: { createdAt: 'desc' }
+  });
 
-  {/* Nama Produk */}
-  <div className="px-4 py-2">
-    <h1 className="text-xl font-semibold text-gray-900 truncate text-center">
-      {data.name}
-    </h1>
-  </div>
-
-  {/* Harga Produk */}
-  <div className="px-4 py-2">
-    <h2 className="text-center text-lg font-medium text-gray-700">
-      {formatCurrency(data.price)}
-    </h2>
-  </div>
-
-  {/* Tombol Edit dan Delete */}
-  <div className="px-4 py-2 flex justify-center space-x-4">
-    {/* {/* <EditMenu id={data.id} /> */}
-    <DeleteMenu id={data.id} /> 
-  </div>
-</div>
-
-    )
+  return (
+    <div className="container mx-auto px-4 py-8">
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-3xl font-bold">Our Menu</h1>
+        <Link 
+          href="/menu/create" 
+          className="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600"
+        >
+          Add New Menu
+        </Link>
+      </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {menus.map((menu) => (
+          <div 
+            key={menu.id} 
+            className="bg-white shadow-lg rounded-lg overflow-hidden"
+          >
+            <Image 
+              src={menu.fotoUrl} 
+              alt={menu.name}
+              width={400}
+              height={300}
+              className="w-full h-48 object-cover"
+            />
+            <div className="p-4">
+              <h2 className="text-xl font-semibold mb-2">{menu.name}</h2>
+              <p className="text-gray-600 mb-2">{menu.description}</p>
+              <div className="flex justify-between items-center">
+                <span className="text-lg font-bold text-yellow-600">
+                {formatCurrency(menu.price)}
+                                </span>
+                <div className="flex space-x-2">
+                  <Link 
+                    href={`/menu/${menu.id}/edit`}
+                    className="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600"
+                  >
+                    Edit
+                  </Link>
+                  <DeleteButton id={menu.id} />
+                </div>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
 }
-
-export default MenuCard

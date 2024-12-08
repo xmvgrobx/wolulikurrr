@@ -10,7 +10,7 @@ export default function Lists() {
         <Link href="/register">Register</Link>
       </li>
       <li>
-        <Link href="/profile">Profile</Link>
+        <Link href="/dashboard">Dashboard</Link>
       </li>
       <button onClick={() => signIn()}>Sign In</button>
       <button onClick={() => signOut()}>Sign Out</button>

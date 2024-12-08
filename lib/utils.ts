@@ -13,13 +13,31 @@ export interface CheckoutFormProps {
   onSuccess: () => void;
 }
 
-export const formatCurrency = (value: number): string => {
-  return new Intl.NumberFormat('id-ID', {
-    style: 'currency',
-    currency: 'IDR',
-  }).format(value);
-};
+export function formatCurrency(value: any): string {
+  // Gunakan toNumber jika value adalah tipe Decimal
+  const numValue = typeof value === "object" && "toNumber" in value ? value.toNumber() : value;
+  return `Rp${numValue.toLocaleString("id-ID", { minimumFractionDigits: 0 })}`;
+}
 
+
+// export const formatCurrency = (amount: number) => {
+//   if (typeof amount !== "number" || isNaN(amount)) {
+//     return "IDR 0"; // Tampilkan default jika amount tidak valid
+//   }
+//   return "IDR " + amount.toLocaleString("id-ID", {
+//     minimumFractionDigits: 0,
+//     maximumFractionDigits: 2,
+//   });
+// };
+
+export const formatDate = (dateStr: string) => {
+  const date = new Date(dateStr);
+  const formatter = new Intl.DateTimeFormat("id-ID", {
+    dateStyle: "medium",
+    timeStyle: "short",
+  });
+  return formatter.format(date);
+};
 
 
 export const formatDateToLocal = (

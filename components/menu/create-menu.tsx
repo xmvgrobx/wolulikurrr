@@ -175,9 +175,9 @@ const CreateMenuForm = () => {
           <button
             type="submit"
             disabled={isSubmitting}
-            className="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 transition duration-300"
+            className="w-full bg-yellow-400 text-white py-2 rounded-lg hover:bg-yellow-600 transition duration-300"
           >
-            {isSubmitting ? 'Creating...' : 'Create Menu Item'}
+            {isSubmitting ? 'Creating...' : 'Create Menu'}
           </button>
         </div>
       </form>

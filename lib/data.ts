@@ -9,6 +9,18 @@ import {
   Revenue,
 } from './definitions';
 import { formatCurrency } from './utils';
+import { prisma } from '@/lib/prisma';
+
+export const getImages = async () => {
+  try {
+    const result = await prisma.menu.findMany({
+      orderBy: { createdAt: "desc" },
+    });
+    return result;
+  } catch (error) {
+    throw new Error("Failed to fetch data");
+  }
+};
 
 export async function fetchRevenue() {
   // Add noStore() here to prevent the response from being cached.

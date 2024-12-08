@@ -29,6 +29,6 @@
     ".next/types/**/*.ts",
     "lib/placeholder-data.js",
     "scripts/seed.js"
-  ],
+, "components/Checkout.tsx"  ],
   "exclude": ["node_modules"]
 }

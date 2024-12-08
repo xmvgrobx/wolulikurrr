@@ -1,11 +1,26 @@
 import { Revenue } from './definitions';
 
-export const formatCurrency = (amount: number) => {
-  return (amount / 100).toLocaleString('en-US', {
+export interface MenuItem {
+  id: string;
+  name: string;
+  price: number;
+  quantity: number;
+}
+
+export interface CheckoutFormProps {
+  cartItems: MenuItem[];
+  onClose: () => void;
+  onSuccess: () => void;
+}
+
+export const formatCurrency = (value: number): string => {
+  return new Intl.NumberFormat('id-ID', {
     style: 'currency',
-    currency: 'USD',
-  });
+    currency: 'IDR',
+  }).format(value);
 };
+
+
 
 export const formatDateToLocal = (
   dateStr: string,

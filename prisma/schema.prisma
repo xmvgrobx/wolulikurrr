@@ -30,3 +30,63 @@ model Pegawai {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
+
+model Menu {
+  id          String   @id @default(cuid())  
+  name        String  
+  price       Float   
+  fotoUrl     String   
+  description String?  
+  createdAt   DateTime @default(now())    
+  updatedAt   DateTime @updatedAt        
+
+  transactionItems TransactionItem[]
+  
+}
+
+model User {
+  id       String @id @default(uuid())
+  name     String
+  email    String @unique
+  password String
+}
+
+model Transaction {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  paymentMethod PaymentMethod
+  cash          Decimal?
+  change        Decimal?
+  note         String?
+  referralCode  String?
+  discount     Decimal @default(0)
+
+  items TransactionItem[]
+}
+
+model TransactionItem {
+  id            String   @id @default(uuid())
+  transactionId String
+  menuId        String
+  quantity      Int      @default(1)
+  price         Decimal
+
+  transaction Transaction @relation(fields: [transactionId], references: [id])
+  menu         Menu       @relation(fields: [menuId], references: [id])
+}
+
+enum PaymentMethod {
+  CASH
+  QRIS
+}
+
+model Referral {
+  id            String   @id @default(uuid())
+  code          String   @unique
+  discount      Decimal  @default(10.00) // 10% discount by default
+  isActive      Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}

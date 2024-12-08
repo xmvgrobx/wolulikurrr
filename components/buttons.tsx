@@ -18,6 +18,7 @@ export const EditPegawai = ({ id }: { id: string }) => {
     );
 };
   
+
 export const DeletePegawai = ({ id }: { id: string }) => {
     const [isDeleting, setIsDeleting] = useState(false);
   
@@ -90,4 +91,70 @@ export const PegawaiAddButton = ({ label }: { label: string }) => {
         )}
       </button>
     );
+};
+
+export const SubmitButtonMenu = ({ 
+  label, 
+  disabled 
+}: { 
+  label: string;
+  disabled?: boolean;
+}) => {
+  return (
+    <button
+      type="submit"
+      disabled={disabled}
+      className={`w-full bg-gray-800 text-white py-2 px-4 rounded-sm hover:bg-gray-900 ${
+        disabled ? 'opacity-50 cursor-not-allowed' : ''
+      }`}
+    >
+      {label}
+    </button>
+  );
+};
+
+export const DeleteMenu = ({ id }: { id: string }) => {
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  const handleDelete = async () => {
+    const confirmed = window.confirm('Yakin ingin menghapus menu ini?');
+    if (!confirmed) return;
+
+    setIsDeleting(true); // Mulai proses penghapusan
+
+    try {
+      const res = await fetch('/api/menu/delete', {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id }),
+      });
+
+      if (res.ok) {
+        alert('Menu berhasil dihapus');
+        window.location.reload(); // Reload halaman untuk memperbarui data
+      } else {
+        const data = await res.json();
+        alert(data.error || 'Gagal menghapus menu');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      alert('Terjadi kesalahan saat menghapus menu');
+    } finally {
+      setIsDeleting(false); // Selesai proses penghapusan
+    }
+  };
+
+  return (
+    <button
+      onClick={handleDelete}
+      className={`py-3 text-sm rounded-bl-md w-full text-center ${
+        isDeleting
+          ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+          : 'bg-gray-50 hover:bg-gray-100'
+      }`}
+      disabled={isDeleting} // Nonaktifkan tombol saat proses berjalan
+    >
+      {isDeleting ? 'Deleting...' : 'Delete'}
+    </button>
+  );
 };
